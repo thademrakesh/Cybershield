@@ -1,0 +1,12 @@
+{
+    "accuracy": 0.9892588243420598,
+    "precision": 0.988652354823292,
+    "recall": 0.9892588243420598,
+    "f1_score": 0.9887910417661161,
+    "train_accuracy": 0.988757738768532,
+    "train_f1": 0.9883079665824777,
+    "test_samples": 28954,
+    "train_samples": 115813,
+    "training_date": "2026-03-21T22:42:42.119270",
+    "validation_status": "Healthy"
+}

@@ -6,7 +6,7 @@ import DashboardLayout from '@/react-app/components/DashboardLayout';
 import SessionSelector from '@/react-app/components/SessionSelector';
 
 export default function XAIExplanation() {
-  const [featureImportance, setFeatureImportance] = useState<{ feature: string; importance: number; impact: 'high' | 'medium' | 'low' }[]>([]);
+  const [featureImportance, setFeatureImportance] = useState<{ feature: string; importance: number; impact: 'high' | 'medium' | 'low'; value: number }[]>([]);
   const [selectedSessionId, setSelectedSessionId] = useState<string | null>(null);
   const [predictionDetails, setPredictionDetails] = useState({
     timestamp: '',
@@ -28,14 +28,6 @@ export default function XAIExplanation() {
   const [items, setItems] = useState<RecentItem[]>([]);
   const [index, setIndex] = useState(0);
   const [explanations, setExplanations] = useState<Record<string, string>>({});
-  type FeatureRecord = {
-    protocol_type?: string;
-    flag?: string;
-    src_bytes?: number;
-    dst_bytes?: number;
-    port?: number | string;
-    service?: string;
-  };
   
   const errorMessageFrom = (err: unknown) => {
     let msg = 'Failed to load explanation';

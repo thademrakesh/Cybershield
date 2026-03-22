@@ -1,12 +1,13 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
 from app.routes import auth, ml, capture, alerts, logs, analytics, admin, sessions, audit, risk, incidents
-from app.database import db
+from app.database import db, check_db_connection
 from app.services.user import create_user, get_user_by_username
 from app.ml.engine import ml_engine
 from app.schemas.user import UserCreate
 import logging
+import asyncio
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -24,18 +25,13 @@ app = FastAPI(title="CyberShield XAI Backend", version="1.0.0")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # CORS
-origins = [
-    "http://localhost",
-    "http://localhost:5173",
-    "http://localhost:5174",
-    "http://localhost:3000",
-    "http://127.0.0.1:5173",
-    "http://127.0.0.1:5174",
-]
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=[
+        "http://localhost:5173",
+        "http://localhost:3000",
+        "https://cybershield-two-pearl.vercel.app"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -56,6 +52,13 @@ app.include_router(sessions.router, prefix="/sessions", tags=["Sessions"])
 
 @app.on_event("startup")
 async def startup_db_client():
+    connected = await check_db_connection()
+    if not connected:
+        print("\n" + "!"*50)
+        print("CRITICAL: Could not connect to MongoDB.")
+        print("Please check your MONGO_URI in the .env file.")
+        print("!"*50 + "\n")
+
     # Create initial admin user if not exists
     admin_user = await get_user_by_username("admin")
     if not admin_user:

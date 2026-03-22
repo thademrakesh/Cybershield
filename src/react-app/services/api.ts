@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8000';
+// Use environment variable if available, fallback to localhost for development
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 const api = axios.create({
   baseURL: API_URL,
@@ -9,13 +10,15 @@ const api = axios.create({
   },
 });
 
-// Add a request interceptor to add the auth token
+// Add a request interceptor to add the auth token and ngrok skip warning
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;
     }
+    // Always add the ngrok skip warning header for ngrok tunnels
+    config.headers['ngrok-skip-browser-warning'] = '69420';
     return config;
   },
   (error) => {

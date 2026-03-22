@@ -41,8 +41,8 @@ export const authService = {
     const response = await api.post('/auth/register', userData);
     return response.data;
   },
-  verifyRegistration: async (email: string, otp: string) => {
-    const response = await api.post('/auth/verify-registration', { email, otp });
+  verifyRegistration: async (email: string, otp: string, userData?: Record<string, unknown>) => {
+    const response = await api.post('/auth/verify-registration', { email, otp, user_data: userData });
     return response.data;
   },
   forgotPassword: async (email: string) => {

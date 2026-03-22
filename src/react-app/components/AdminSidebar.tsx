@@ -62,7 +62,7 @@ export default function AdminSidebar() {
           onClick={() => {
             localStorage.removeItem('token');
             localStorage.removeItem('user');
-            window.location.href = '/login';
+            window.location.href = '/';
           }}
           className="flex items-center space-x-3 px-4 py-3 w-full text-gray-400 hover:bg-slate-800/50 hover:text-red-400 rounded-lg transition-all"
         >

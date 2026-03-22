@@ -76,7 +76,7 @@ export default function SignupPage() {
     setLoading(true);
 
     try {
-      await authService.verifyRegistration(formData.email, otp);
+      await authService.verifyRegistration(formData.email, otp, formData);
       setSuccess('Verification successful! Logging you in...');
       
       // Auto login after verification

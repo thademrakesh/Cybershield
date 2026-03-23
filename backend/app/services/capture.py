@@ -171,20 +171,25 @@ class CaptureService:
                     if addr and addr.startswith("127."):
                         continue
                     res.append({"id": str(iface), "name": str(iface)})
-            try:
-                import platform
-                if platform.system() == "Windows":
-                    # We constructed NPF IDs, so they should be valid.
-                    # Just ensure uniqueness
-                    seen = set()
-                    unique_res = []
-                    for r in res:
-                        if r["id"] not in seen:
-                            seen.add(r["id"])
-                            unique_res.append(r)
-                    res = unique_res
-            except Exception:
-                pass
+            # Ensure uniqueness
+            seen = set()
+            unique_res = []
+            for r in res:
+                if r["id"] not in seen:
+                    seen.add(r["id"])
+                    unique_res.append(r)
+            res = unique_res
+
+            # Manually add requested interfaces if not detected
+            manual_interfaces = [
+                {"id": "wifi1", "name": "wifi1"},
+                {"id": "ethernet", "name": "ethernet"}
+            ]
+            for m in manual_interfaces:
+                if m["id"] not in seen:
+                    res.append(m)
+                    seen.add(m["id"])
+
             # Final sanitize to ensure JSON serializable strings only
             res = [{"id": str(r.get("id")), "name": str(r.get("name"))} for r in res if isinstance(r, dict) and r.get("id") is not None and r.get("name") is not None]
             if not res and conf.iface:

@@ -93,7 +93,7 @@ async def startup_db_client():
 @app.get("/")
 async def root():
     return {"message": "CyberShield XAI Backend API is running"}
-
+port = int(os.environ.get("PORT", 8000))
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("app.main:app", host="0.0.0.0", port, reload=True)
